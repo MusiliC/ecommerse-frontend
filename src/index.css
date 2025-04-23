@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    /* Font Family */
+    --font-family-montserrat: "Montserrat", sans-serif;
+
+    /* Box Shadow */
+    --box-shadow-custom: 0 0 15px rgba(0, 0, 0, 0.3);
+    --box-shadow-right: 10px 0px 10px -5px rgba(0, 0, 0, 0.3);
+
+    /* Colors */
+    --color-custom-blue: 28 100 242 / 1;
+    --color-banner-color1: #FDC200;
+    --color-banner-color2: #FF2C2C;
+    --color-banner-color3: #21AD61;
+    --color-banner-color4: #723DA6;
+
+    /* Background Image (Gradients) */
+    --background-image-custom-gradient: linear-gradient(to right, #111827, #1f2937);
+    --background-image-button-gradient: linear-gradient(to right, #7e22ce, #ef4444);
+    --background-image-custom-gradient2: linear-gradient(135deg, #f5f5f5, #eae7dc);
+}
