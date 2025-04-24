@@ -1,6 +1,5 @@
 import { FaCheckCircle } from "react-icons/fa";
-import { StatusBadge } from "./Status";
-import { Button } from "./ui/button";
+
 import {
   Dialog,
   DialogContent,
@@ -10,6 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { XCircle } from "lucide-react";
 import { ProductType } from "@/types";
+import { StatusBadge } from "../shared/Status";
+import { Button } from "../ui/button";
 
 type ProductViewModalProps = {
   isOpen: boolean;

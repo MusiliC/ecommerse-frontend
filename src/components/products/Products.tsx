@@ -3,6 +3,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getProductsAction } from "@/redux/actions/ProductionAction";
+import Filter from "../shared/Filter";
 
 
 function Products() {
@@ -24,6 +25,7 @@ function Products() {
 
   return (
     <div className="lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto">
+      <Filter/>
       {isLoading ? (
         <p>Is Loading.......</p>
       ) : !success ? (
