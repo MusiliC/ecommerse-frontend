@@ -7,7 +7,9 @@ const initialState: StateType = {
   products: null,
   categories: null,
   pagination: {},
-  loading: false,
+  isLoading: false,
+  error: null,
+  success: false,
 };
 
 export const productSlice = createSlice({
@@ -17,21 +19,24 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getProductsAction.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(getProductsAction.fulfilled, (state, action) => {
-        state.products = action.payload?.data.content;
+        state.products = action.payload?.content;
         state.pagination = {
-          pageNumber: action.payload?.data.pageNumber,
-          pageSize: action.payload?.data.pageSize,
-          totalElements: action.payload?.data.totalElements,
-          totalPages: action.payload?.data.totalPages,
-          lastPage: action.payload?.data.lastPage,
+          pageNumber: action.payload?.pageNumber,
+          pageSize: action.payload?.pageSize,
+          totalElements: action.payload?.totalElements,
+          totalPages: action.payload?.totalPages,
+          lastPage: action.payload?.lastPage,
         };
-        state.loading = false;
+        state.isLoading = false;
+        state.success = true;
       })
-      .addCase(getProductsAction.rejected, (state) => {
-        state.loading = false;
+      .addCase(getProductsAction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = (action.payload as string) || "Unknown error occurred";
       });
   },
 });

@@ -6,16 +6,14 @@ export const getProductsAction = createAsyncThunk(
   "products/getProducts",
   async (_, thunkAPI) => {
     try {
-      const {data} = await api.get("public/products");
-      return {
-        data: data.data,
-        success: true,
-      };
+      const { data } = await api.get("public/products");
+      return data.data;
     } catch (error: unknown) {
       localStorage.clear();
       console.log(error);
       const parsedError = handleApiError(error);
-      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+
+      return thunkAPI.rejectWithValue(parsedError);
     }
   }
 );

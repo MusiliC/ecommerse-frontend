@@ -2,7 +2,9 @@ export type StateType = {
   products: ProductType[] | CategoryType[] | null;
   categories: CategoryType[] | null;
   pagination: PaginationType;
-  loading: boolean;
+  isLoading: boolean;
+  error: string | null;
+  success: boolean;
 };
 
 export type ActionType = {

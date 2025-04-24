@@ -4,14 +4,17 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getProductsAction } from "@/redux/actions/ProductionAction";
 
-const isLoading = false;
-const isError = false;
-const errorMessage = "Something went wrong!";
 
 function Products() {
-  const {products:productList} = useAppSelector((state) => state.products);
-;
-  
+  const {
+    products: productList,
+    isLoading,
+    error,
+    success
+  } = useAppSelector((state) => state.products);
+  const { products } = useAppSelector((state) => state);
+  console.log(products);
+
 
   const dispatch = useAppDispatch();
 
@@ -23,12 +26,10 @@ function Products() {
     <div className="lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto">
       {isLoading ? (
         <p>Is Loading.......</p>
-      ) : isError ? (
+      ) : !success ? (
         <div className="flex justify-center items-center h-[200px]">
           <FaExclamationTriangle className="text-3xl text-slate-800 mr-2" />
-          <span className="text-slate-800 text-lg font-medium">
-            {errorMessage}
-          </span>
+          <span className="text-slate-800 text-lg font-medium">{error}</span>
         </div>
       ) : (
         <div className="min-h-[700px]">
@@ -37,7 +38,6 @@ function Products() {
               productList.map((item, i) => <ProductCard key={i} {...item} />)}
           </div>
         </div>
-       
       )}
     </div>
   );
