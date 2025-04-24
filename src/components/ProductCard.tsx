@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProductType } from "./Products";
 import { FaShoppingCart } from "react-icons/fa";
+import ProductViewModal from "./ProductViewModal";
 
 function ProductCard({
   productId,
@@ -13,93 +14,96 @@ function ProductCard({
   specialPrice,
 }: ProductType) {
   const [openProductViewModal, setOpenProductViewModal] = useState(false);
-  const btnLoader = false;
-  const [selectedViewProduct, setSelectedViewProduct] = useState<ProductType>();
+  const [btnLoader] = useState(false);
   const isAvailable = quantity > 0;
 
-  const handleProductView = (prod: ProductType) => {
-    setSelectedViewProduct(prod);
+  const handleProductView = () => {
     setOpenProductViewModal(true);
   };
 
+  const productData = {
+    productId,
+    productName,
+    image,
+    description,
+    quantity,
+    price,
+    discount,
+    specialPrice,
+  };
+
   return (
-    <div className="border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300">
+    <div className="border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300 hover:shadow-2xl">
+      {/* Product Image */}
       <div
-        onClick={() => {
-          handleProductView({
-            productId,
-            productName,
-            image,
-            description,
-            quantity,
-            price,
-            discount,
-            specialPrice,
-          });
-        }}
-        className="w-full overflow-hidden aspect-[3/2]"
+        onClick={handleProductView}
+        className="w-full overflow-hidden aspect-[3/2] cursor-pointer"
       >
         <img
-          className="w-full h-full cursor-pointer transition-transform duration-300 hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           src={image}
           alt={productName}
+          loading="lazy" // Added lazy loading
         />
       </div>
-      <div className="p-4 ">
+
+      {/* Product Info */}
+      <div className="p-4">
         <h2
-          onClick={() => {
-            {
-              handleProductView({
-                productId,
-                productName,
-                image,
-                description,
-                quantity,
-                price,
-                discount,
-                specialPrice,
-              });
-            }
-          }}
-          className="text-lg font-semibold mb-2 cursor-pointer"
+          onClick={handleProductView}
+          className="text-lg font-semibold mb-2 cursor-pointer hover:text-blue-600 transition-colors"
         >
           {productName}
         </h2>
 
-        <div className="min-h-20 max-h-30 ">
-          <p className="text-gray-600 text-sm">{description}</p>
+        <div className="min-h-20 max-h-30 mb-3">
+          <p className="text-gray-600 text-sm line-clamp-3">{description}</p>{" "}
+          {/* Added line clamp */}
         </div>
 
-        <div className="flex justify-between items-center ">
+        {/* Price and Add to Cart */}
+        <div className="flex justify-between items-center">
           <div>
-            <span className="text-gray-500 text-sm">Price: </span>
-            <span className="text-gray-700  font-semibold">
-              {specialPrice ? (
-                <>
-                  <span className="line-through text-gray-400 mr-2">
-                    kes {price.toFixed(2)}
-                  </span>
+            {specialPrice ? (
+              <div className="flex items-center">
+                <span className="line-through text-gray-400 mr-2">
+                  kes {price.toFixed(2)}
+                </span>
+                <span className="text-gray-700 font-semibold">
                   kes {specialPrice.toFixed(2)}
-                </>
-              ) : (
-                price
-              )}
-            </span>
+                </span>
+              </div>
+            ) : (
+              <span className="text-gray-700 font-semibold">
+                kes {price.toFixed(2)}
+              </span>
+            )}
           </div>
           <div>
             <button
               disabled={btnLoader || !isAvailable}
               onClick={() => {}}
               className={`bg-blue-500 ${
-                isAvailable ? "opacity-100 hover:bg-blue-600" : "opacity-70 "
+                isAvailable
+                  ? "opacity-100 hover:bg-blue-600"
+                  : "opacity-70 cursor-not-allowed"
               } text-white py-2 px-3 rounded-lg items-center transition-colors duration-300 w-36 flex justify-center`}
+              aria-label={isAvailable ? "Add to cart" : "Out of stock"}
             >
-              <FaShoppingCart className="mr-2 " />
+              <FaShoppingCart className="mr-2" />
               {isAvailable ? "Add To Cart" : "Stock Out"}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Product View Modal */}
+      <ProductViewModal
+        isOpen={openProductViewModal}
+        setIsOpen={setOpenProductViewModal}
+        product={productData}
+        isAvailable={isAvailable}
+      />
     </div>
   );
 }
