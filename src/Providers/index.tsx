@@ -7,7 +7,7 @@ import  { Toaster } from "react-hot-toast";
 const queryClient = new QueryClient();
 const Providers = ({ children }: PropsWithChildren) => {
   return (
-
+        
         <QueryClientProvider client={queryClient}>
           {children}
           <Toaster />
