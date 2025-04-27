@@ -13,8 +13,7 @@ function Products() {
     error,
     success
   } = useAppSelector((state) => state.products);
-  const { products } = useAppSelector((state) => state);
-  console.log(products);
+  const { products } = useAppSelector((state) => state); 
 
 
   const dispatch = useAppDispatch();
