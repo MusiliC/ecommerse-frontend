@@ -20,39 +20,27 @@ import {
 import { Button } from "../ui/button";
 
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { CategoryType } from "@/types";
 
-const categories = [
-  {
-    catId: 5,
-    name: "all",
-  },
-  {
-    catId: 1,
-    name: "Category 1",
-  },
-  {
-    catId: 2,
-    name: "Category 2",
-  },
-  {
-    catId: 3,
-    name: "Category 3",
-  },
-];
 
-function Filter() {
+type FilterProps = {
+  categories: CategoryType[] | null;
+}
+
+
+function Filter({categories }: FilterProps) {
   const [searchParams] = useSearchParams();
   const pathName = useLocation().pathname;
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
   const navigate = useNavigate();
 
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const currentCategory = searchParams.get("category") || "all";
-    const currentSortOrder = searchParams.get("sortby") || "asc";
+    const currentCategory = searchParams.get("category") || "";
+    const currentSortOrder = searchParams.get("sortOrder") || "asc";
     const currentSearchOrder = searchParams.get("keyword") || "";
 
     setCategory(currentCategory);
@@ -73,11 +61,14 @@ function Filter() {
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => {
-      const newOrder = prevOrder === "asc" ? "desc" : "asc";
-      params.set("sortby", newOrder);
+      const newOrder = prevOrder === "asc" ? "desc" : "asc";     
+      
+      params.set("sortOrder", newOrder);
       navigate(`${pathName}?${params}`);
       return newOrder;
     });
+
+
   };
 
   const handleClearFilter = () => {
@@ -105,7 +96,12 @@ function Filter() {
     <div>
       <div className="flex lg:flex-row flex-row-reverse lg:justify-between justify-center items-center gap-4">
         <div className="relative flex items-center 2xl:w-[450px] sm:w-[420px] w-full">
-          <Input type="text" placeholder="Search Products" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          <Input
+            type="text"
+            placeholder="Search Products"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <span className="absolute right-2">
             <Search className="text-slate-800" />
           </span>
@@ -118,9 +114,12 @@ function Filter() {
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Categories</SelectLabel>
-                {categories.map((category) => (
-                  <SelectItem key={category.catId} value={category.name}>
-                    {category.name}
+                {categories && categories.map((category) => (
+                  <SelectItem
+                    key={category.categoryId}
+                    value={category.categoryName}
+                  >
+                    {category.categoryName}
                   </SelectItem>
                 ))}
               </SelectGroup>

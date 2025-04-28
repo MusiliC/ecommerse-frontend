@@ -4,9 +4,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getProductsAction = createAsyncThunk(
   "products/getProducts",
-  async (_, thunkAPI) => {
+  async (params: URLSearchParams | Record<string, any>, thunkAPI) => {
     try {
-      const { data } = await api.get("public/products");
+         const paramsObject = params
+           ? params instanceof URLSearchParams
+             ? Object.fromEntries(params.entries())
+             : params
+           : {};
+
+      const { data } = await api.get("public/products", {
+        params: paramsObject,
+      });
       return data.data;
     } catch (error: unknown) {
       localStorage.clear();

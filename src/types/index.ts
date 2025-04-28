@@ -28,11 +28,16 @@ export type ProductType = {
   specialPrice: number;
 };
 
-export type CategoryType = {
+export type cartType = {
   cartId: number;
   userId: number;
   totalPrice: number;
   products: ProductType[];
+};
+
+export type CategoryType = {
+  categoryId: number;
+  categoryName: string;
 };
 
 export type PaginationType = {
