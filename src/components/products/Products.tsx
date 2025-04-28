@@ -7,12 +7,14 @@ import useProductFilter from "@/hooks/useProductFilter";
 import { useEffect } from "react";
 import { getCategoriesAction } from "@/redux/actions/CategoriesAction";
 import Loader from "../shared/Loader";
+import { PaginationComponent } from "../shared/Pagination";
 
 
 function Products() {
   const {
     products: productList,
     isLoading,
+    pagination,
     error,
     success,
   } = useAppSelector((state) => state.products);
@@ -31,7 +33,7 @@ function Products() {
     <div className="lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto">
       <Filter categories={categories ? categories : []} />
       {isLoading ? (
-        <Loader/>
+        <Loader />
       ) : !success ? (
         <div className="flex justify-center items-center h-[200px]">
           <FaExclamationTriangle className="text-3xl text-slate-800 mr-2" />
@@ -41,12 +43,14 @@ function Products() {
         <div className="min-h-[700px]">
           <div className="pb-6 pt-14 grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-6">
             {productList &&
-              productList.map((item, i) => (
-                <ProductCard key={i} {...item} />
-              ))}
+              productList.map((item, i) => <ProductCard key={i} {...item} />)}
           </div>
         </div>
       )}
+      <PaginationComponent
+        numberOfPages={pagination?.totalPages}
+      
+      />
     </div>
   );
 }
