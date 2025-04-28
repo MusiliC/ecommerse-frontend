@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getCategoriesAction } from "@/redux/actions/CategoriesAction";
 import Loader from "../shared/Loader";
 import { PaginationComponent } from "../shared/Pagination";
+import { ProductType } from "@/types";
 
 
 function Products() {
@@ -42,15 +43,15 @@ function Products() {
       ) : (
         <div className="min-h-[700px]">
           <div className="pb-6 pt-14 grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-6">
-            {productList &&
-              productList.map((item, i) => <ProductCard key={i} {...item} />)}
+            {productList && productList
+              .filter((item): item is ProductType => "productId" in item)
+              .map((item) => (
+                <ProductCard key={item.productId} {...item} />
+              ))}
           </div>
         </div>
       )}
-      <PaginationComponent
-        numberOfPages={pagination?.totalPages}
-      
-      />
+      <PaginationComponent numberOfPages={pagination?.totalPages} />
     </div>
   );
 }

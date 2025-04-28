@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ProductType } from "./Products";
 import { FaShoppingCart } from "react-icons/fa";
 import ProductViewModal from "./ProductViewModal";
+import { truncateText } from "../utils/truncateText";
+import { ProductType } from "@/types";
 
 function ProductCard({
   productId,
@@ -53,11 +54,13 @@ function ProductCard({
           onClick={handleProductView}
           className="text-lg font-semibold mb-2 cursor-pointer hover:text-blue-600 transition-colors"
         >
-          {productName}
+          {truncateText(productName, 40)}
         </h2>
 
         <div className="min-h-20 max-h-30 mb-3">
-          <p className="text-gray-600 text-sm line-clamp-3">{description}</p>{" "}
+          <p className="text-gray-600 text-sm line-clamp-3">
+            {truncateText(description)}
+          </p>{" "}
           {/* Added line clamp */}
         </div>
 
