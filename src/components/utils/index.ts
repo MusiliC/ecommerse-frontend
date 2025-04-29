@@ -23,3 +23,11 @@ export const bannerLists = [
     description: "Bright and fun styles for kids, up to 20% off",
   },
 ];
+
+export const navLinks = [
+  { to: "/", label: "Home", translation: "nav.home" },
+  { to: "/about", label: "About", translation: "nav.about" },
+  { to: "/contact", label: "Contact", translation: "nav.contact" },
+  { to: "/sign-in", label: "Login", translation: "nav.login" },
+  { to: "/register", label: "Register", translation: "nav.register" },
+];

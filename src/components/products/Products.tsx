@@ -9,6 +9,7 @@ import { getCategoriesAction } from "@/redux/actions/CategoriesAction";
 import Loader from "../shared/Loader";
 import { PaginationComponent } from "../shared/Pagination";
 import { ProductType } from "@/types";
+import ErrorComponent from "../shared/ErrorComponent";
 
 
 function Products() {
@@ -36,10 +37,7 @@ function Products() {
       {isLoading ? (
         <Loader />
       ) : !success ? (
-        <div className="flex justify-center items-center h-[200px]">
-          <FaExclamationTriangle className="text-3xl text-slate-800 mr-2" />
-          <span className="text-slate-800 text-lg font-medium">{error}</span>
-        </div>
+       <ErrorComponent error={error} />
       ) : (
         <div className="min-h-[700px]">
           <div className="pb-6 pt-14 grid 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-6">
