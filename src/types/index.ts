@@ -1,11 +1,26 @@
 export type StateType = {
-  products: ProductType[] | CategoryType[] | null;
+  products: ProductType[] | null;
   categories: CategoryType[] | null;
   pagination: PaginationType;
   isLoading: boolean;
   error: string | null;
   success: boolean;
 };
+
+export type cartState = {
+  cart: CartItemType[];
+  totalPrice: number;
+  cartId: number | null;
+};
+
+export type CartItemType = {
+  productId: number; // References ProductType's productId
+  quantity: number; // Quantity in the cart
+  price: number; // Price at the time of adding to cart
+  productName?: string; // Optional for display
+};
+
+
 
 export type ActionType = {
   type: string;

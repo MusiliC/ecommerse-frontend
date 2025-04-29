@@ -1,8 +1,9 @@
 // productSlice.ts
-import { StateType } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { ProductType, StateType } from "@/types";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { getProductsAction } from "../actions/ProductionAction";
 import { getCategoriesAction } from "../actions/CategoriesAction";
+import { RootState } from "../store";
 
 const initialState: StateType = {
   products: null,
@@ -64,5 +65,21 @@ export const productSlice = createSlice({
       });
   },
 });
+
+
+const selectProducts = (state:RootState) => state.products;
+
+// Selector for the products array only
+export const selectProductList = createSelector(
+  [selectProducts],
+  (products) => products.products
+);
+
+// New selector to find a product by productId
+export const selectProductById = createSelector(
+  [selectProductList, (_, productId: number) => productId],
+  (products, productId): ProductType | undefined =>
+    products?.find((item) => item.productId === productId)
+);
 
 export default productSlice.reducer;
