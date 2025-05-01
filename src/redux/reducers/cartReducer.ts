@@ -1,21 +1,50 @@
-import {  cartState, ProductType } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { cartItemType, cartState, ProductType } from "@/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 const cartItemsString = localStorage.getItem("cartItems");
-const cartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
-
+const cartItems: cartItemType[] = cartItemsString
+  ? JSON.parse(cartItemsString).map(
+      (item: ProductType) =>
+        "item" in item ? item : { item: item, quantity: item.quantity || 1 } 
+    )
+  : [];
 const initialState: cartState = {
-  cart: cartItems, // Use the cartItems from localStorage
-  totalPrice: calculateTotalPrice(cartItems), // You might want to calculate this
+  cart: cartItems,
+  totalPrice: calculateTotalPrice(cartItems),
+  totalItems: calculateTotalItems(cartItems), // Initialize totalItems
   cartId: null,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function calculateTotalPrice(items: any[]): number {
-  return items.reduce((total, item) => total + item.price * item.quantity, 0);
+interface AddToCartPayload {
+  product: ProductType;
+  quantity: number;
 }
 
-const saveCartToStorage = (items: ProductType[]) => {
+function calculateTotalPrice(items: cartItemType[]): number {
+  return items.reduce((total, cartItem) => {
+    const { item, quantity } = cartItem;
+    if (typeof item.price !== "number" || typeof quantity !== "number") {
+      return total;
+    }
+    const priceToUse =
+      typeof item.specialPrice === "number" && item.specialPrice > 0
+        ? item.specialPrice
+        : item.price;
+    return total + priceToUse * quantity;
+  }, 0);
+}
+
+function calculateTotalItems(items: cartItemType[]): number {
+  return items.reduce((total, cartItem) => {
+    if (typeof cartItem.quantity !== "number") {
+      return total;
+    }
+    return total + cartItem.quantity;
+  }, 0);
+}
+
+const saveCartToStorage = (items: cartItemType[]) => {
   try {
     localStorage.setItem("cartItems", JSON.stringify(items));
   } catch (error) {
@@ -27,37 +56,47 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (
-      state,
-      action: {
-        payload: ProductType;
-      }
-    ) => {
-      const productToAdd = action.payload;
-
+    addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
+      const { product, quantity } = action.payload;
       const existingItemIndex = state.cart.findIndex(
-        (item:ProductType) => item.productId === productToAdd.productId
+        (cartItem) => cartItem.item.productId === product.productId
       );
 
       if (existingItemIndex >= 0) {
-        state.cart = state.cart.map((item: ProductType) =>
-          item.productId === productToAdd.productId ? productToAdd : item
+        // Update quantity if item exists
+        state.cart = state.cart.map((cartItem, index) =>
+          index === existingItemIndex
+            ? { ...cartItem, quantity: cartItem.quantity + quantity }
+            : cartItem
         );
       } else {
-        state.cart = [...state.cart, productToAdd];
+        // Add new item
+        state.cart = [...state.cart, { item: product, quantity }];
       }
 
-      // Save cart to storage after updating state
       saveCartToStorage(state.cart);
+      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalItems = calculateTotalItems(state.cart);
+    },
+    increaseQuantity: (state, action: PayloadAction<number>) => {
+      const productId = action.payload;
+      const cartItem = state.cart.find(
+        (cartItem) => cartItem.item.productId === productId
+      );
 
-      // Optionally update totalPrice if needed
-      // state.totalPrice = calculateTotalPrice(state.cart);
-
-      return state; // Return the updated state
+      if (cartItem) {
+        cartItem.quantity += 1;
+        saveCartToStorage(state.cart);
+        state.totalPrice = calculateTotalPrice(state.cart);
+        state.totalItems = calculateTotalItems(state.cart);
+      }
     },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, increaseQuantity } = cartSlice.actions;
+
+export const selectCartItems = (state: RootState): cartItemType[] =>
+  state.cart.cart;
 
 export default cartSlice.reducer;

@@ -8,13 +8,16 @@ export type StateType = {
 };
 
 export type cartState = {
-  cart: CartItemType[];
+  cart: cartItemType[];
   totalPrice: number;
+  totalItems: number;
   cartId: number | null;
 };
 
-
-
+export type cartItemType = {
+  item: ProductType;
+  quantity: number;
+}
 
 
 export type ActionType = {

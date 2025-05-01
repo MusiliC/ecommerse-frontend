@@ -1,5 +1,4 @@
 import ProductCard from "./ProductCard";
-import { FaExclamationTriangle } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import Filter from "../shared/Filter";

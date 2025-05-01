@@ -76,9 +76,11 @@ export const selectProductList = createSelector(
 );
 
 // New selector to find a product by productId
-export const selectProductById = createSelector(
+
+export const selectProductById = createSelector(  
   [selectProductList, (_, productId: number) => productId],
   (products, productId): ProductType | undefined =>
+    
     products?.find((item) => item.productId === productId)
 );
 

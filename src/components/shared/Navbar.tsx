@@ -47,11 +47,13 @@ const PublicHeader = () => {
                 </li>
               ))}
             <li>
-              <IconButton aria-label="cart">
-                <StyledBadge badgeContent={4} className="text-white">
-                  <ShoppingCart/>
-                </StyledBadge>
-              </IconButton>
+              <Link to="cart">
+                <IconButton aria-label="cart">
+                  <StyledBadge badgeContent={4} className="text-white">
+                    <ShoppingCart />
+                  </StyledBadge>
+                </IconButton>
+              </Link>
             </li>
           </ul>
 
