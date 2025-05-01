@@ -90,7 +90,7 @@ export const decreaseQuantityAction = (productId: number): AppThunk<boolean> => 
 
     if (isQuantityValid) {
       dispatch(decreaseQuantity(productId));
-      toast.success("Quantity increased");
+      toast.success("Quantity decreased");
     } else {
       toast.error("Minimum quantity is 1");
     }

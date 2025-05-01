@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useAppSelector } from "@/redux/hooks";
 import ItemContent from "./ItemContent";
+import useProductFilter from "@/hooks/useProductFilter";
 
 function Cart() {
   const { cart, totalPrice } = useAppSelector((state) => state.cart);
-
   
+   useProductFilter();
 
  if(!cart || cart.length === 0) return <h1>Card  Is Empty</h1>
 
