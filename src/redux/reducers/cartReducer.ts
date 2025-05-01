@@ -120,4 +120,7 @@ export const { addToCart, increaseQuantity, removeFromCart, decreaseQuantity } =
 export const selectCartItems = (state: RootState): cartItemType[] =>
   state.cart.cart;
 
+export const selectTotalCartItems = (state: RootState): number =>
+  state.cart.totalItems;
+
 export default cartSlice.reducer;

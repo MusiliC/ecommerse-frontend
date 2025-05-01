@@ -4,13 +4,15 @@ import { Button } from "../ui/button";
 import { useAppSelector } from "@/redux/hooks";
 import ItemContent from "./ItemContent";
 import useProductFilter from "@/hooks/useProductFilter";
+import CartEmpty from "./CartEmpty";
+import { formatCurrency } from "../utils/formatPrice";
 
 function Cart() {
   const { cart, totalPrice } = useAppSelector((state) => state.cart);
   
    useProductFilter();
 
- if(!cart || cart.length === 0) return <h1>Card  Is Empty</h1>
+ if(!cart || cart.length === 0) return <CartEmpty/>
 
   return (
     <div className="lg:px-14 sm:px-8 px-4 py-10">
@@ -44,7 +46,7 @@ function Cart() {
         <div className="flex text-sm gap-1 flex-col">
           <div className="flex justify-between w-full md:text-lg text-sm font-semibold">
             <span>Total</span>
-            <span> {totalPrice ? <p>{totalPrice}</p> : <p>0</p>}</span>
+            <span> {totalPrice ? <p>{formatCurrency(totalPrice)}</p> : <p>0</p>}</span>
           </div>
           <p className="text-slate-500 ">
             Taxes and shipping calculated at checkout

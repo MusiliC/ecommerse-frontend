@@ -9,6 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import { navLinks } from "../utils";
 import useResponsive from "../hooks/useResponsive";
 import { ShoppingCart } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectTotalCartItems } from "@/redux/reducers/cartReducer";
+
 
 const StyledBadge = styled(Badge)<BadgeProps>(() => ({
   "& .MuiBadge-badge": {
@@ -23,6 +26,8 @@ const StyledBadge = styled(Badge)<BadgeProps>(() => ({
 const PublicHeader = () => {
 
   const { smaller, larger } = useResponsive();
+
+    const totalItems = useAppSelector(selectTotalCartItems);
 
   return (
     <header className="flex items-center px-4 h-16 bg-gray-600">
@@ -49,7 +54,7 @@ const PublicHeader = () => {
             <li>
               <Link to="cart">
                 <IconButton aria-label="cart">
-                  <StyledBadge badgeContent={4} className="text-white">
+                  <StyledBadge badgeContent={totalItems} className="text-white">
                     <ShoppingCart />
                   </StyledBadge>
                 </IconButton>

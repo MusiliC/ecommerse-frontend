@@ -4,6 +4,7 @@ import SetQuantity from "./SetQuantity";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { decreaseQuantityAction, increaseCartQuantity, removeFromCartAction } from "@/redux/actions/CartAction";
 import { selectCartItems } from "@/redux/reducers/cartReducer";
+import { formatCurrency } from "../utils/formatPrice";
 
 interface ItemContentProps {
   item: ProductType;
@@ -49,7 +50,9 @@ function ItemContent({ item, itemQuantity }: ItemContentProps) {
 
         <div className="flex items-start gap-5 mt-3">
           <button
-            onClick={() => {removeFromCart(item.productId)}}
+            onClick={() => {
+              removeFromCart(item.productId);
+            }}
             className="flex items-center font-semibold space-x-2 px-4 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-50 transition-colors duration-300"
           >
             Remove <TrashIcon />{" "}
@@ -64,16 +67,18 @@ function ItemContent({ item, itemQuantity }: ItemContentProps) {
           handleQtyIncrease={() => {
             handleQuantityIncrease(item.productId);
           }}
-          handleQtyDecrease={() => {handleQuantityDecrease(item.productId)}}
+          handleQtyDecrease={() => {
+            handleQuantityDecrease(item.productId);
+          }}
         />
       </div>
 
       <div className="justify-self-center lg:text-[17px] text-sm text-slate-600 font-semibold">
-        {item.specialPrice}
+        {formatCurrency(item.specialPrice)}
       </div>
 
       <div className="justify-self-end lg:text-[17px] text-sm text-slate-600 font-semibold">
-        {Number(item.specialPrice) * Number(currentQuantity)}
+        {formatCurrency(Number(item.specialPrice) * Number(currentQuantity))}
       </div>
     </div>
   );

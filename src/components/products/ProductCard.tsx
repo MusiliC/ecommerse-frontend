@@ -5,6 +5,7 @@ import { truncateText } from "../utils/truncateText";
 import { ProductType } from "@/types";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCartAction } from "@/redux/actions/CartAction";
+import { formatCurrency } from "../utils/formatPrice";
 
 function ProductCard({
   productId,
@@ -78,15 +79,15 @@ function ProductCard({
             {specialPrice ? (
               <div className="flex items-center">
                 <span className="line-through text-gray-400 mr-2">
-                  kes {price.toFixed(2)}
+                  {formatCurrency(price)}
                 </span>
                 <span className="text-gray-700 font-semibold">
-                  kes {specialPrice.toFixed(2)}
+                  {formatCurrency(price)}
                 </span>
               </div>
             ) : (
               <span className="text-gray-700 font-semibold">
-                kes {price.toFixed(2)}
+                {formatCurrency(price)}
               </span>
             )}
           </div>
