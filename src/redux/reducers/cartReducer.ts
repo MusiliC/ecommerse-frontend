@@ -1,4 +1,4 @@
-import { CartItemType, cartState } from "@/types";
+import {  cartState, ProductType } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 const cartItemsString = localStorage.getItem("cartItems");
@@ -15,7 +15,7 @@ function calculateTotalPrice(items: any[]): number {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
-const saveCartToStorage = (items: CartItemType[]) => {
+const saveCartToStorage = (items: ProductType[]) => {
   try {
     localStorage.setItem("cartItems", JSON.stringify(items));
   } catch (error) {
@@ -30,37 +30,33 @@ export const cartSlice = createSlice({
     addToCart: (
       state,
       action: {
-        payload: {
-          productId: number;
-          quantity: number;
-          price: number;
-          productName: string;
-        };
+        payload: ProductType;
       }
     ) => {
-      const { productId, quantity, price, productName } = action.payload;
+      const productToAdd = action.payload;
 
       const existingItemIndex = state.cart.findIndex(
-        (item) => item.productId === productId
+        (item:ProductType) => item.productId === productToAdd.productId
       );
 
       if (existingItemIndex >= 0) {
-        // Update quantity
-        state.cart[existingItemIndex].quantity += quantity;
+        state.cart = state.cart.map((item: ProductType) =>
+          item.productId === productToAdd.productId ? productToAdd : item
+        );
       } else {
-        // Add new item
-        state.cart.push({ productId, quantity, price, productName });
+        state.cart = [...state.cart, productToAdd];
       }
 
-      // Update totalPrice
-      state.totalPrice = calculateTotalPrice(state.cart);
-
-      // Save to localStorage
+      // Save cart to storage after updating state
       saveCartToStorage(state.cart);
+
+      // Optionally update totalPrice if needed
+      // state.totalPrice = calculateTotalPrice(state.cart);
+
+      return state; // Return the updated state
     },
   },
 });
-
 
 export const { addToCart } = cartSlice.actions;
 

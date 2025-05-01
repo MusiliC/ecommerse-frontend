@@ -13,12 +13,7 @@ export type cartState = {
   cartId: number | null;
 };
 
-export type CartItemType = {
-  productId: number; // References ProductType's productId
-  quantity: number; // Quantity in the cart
-  price: number; // Price at the time of adding to cart
-  productName?: string; // Optional for display
-};
+
 
 
 

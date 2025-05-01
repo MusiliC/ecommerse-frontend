@@ -2,6 +2,7 @@ import { ProductType } from "@/types";
 import { AppThunk } from "../store";
 import { selectProductById } from "../reducers/productReducer";
 import { addToCart } from "../reducers/cartReducer";
+import toast from "react-hot-toast";
 
 export const addToCartAction = (
   data: ProductType,
@@ -16,18 +17,14 @@ export const addToCartAction = (
       isQuantityExist = getProduct.quantity >= qty;
       if (isQuantityExist) {
         dispatch(
-          addToCart({
-            productId: getProduct.productId,
-            quantity: qty,
-            price: getProduct.specialPrice || getProduct.price, 
-            productName: getProduct.productName,
-          })
+          addToCart(getProduct)
         );
+        toast.success("Added to cart");
       } else {
-        console.error("Insufficient quantity");
+        toast.error("Insufficient quantity");
       }
     } else {
-      console.error("Product not found");
+      toast.error("Product not found");
     }
 
     return isQuantityExist;
