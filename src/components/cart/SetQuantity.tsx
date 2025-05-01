@@ -1,6 +1,5 @@
 import { Button } from "../ui/button";
 
-
 type setQuantityProps = {
   quantity: number;
   cardCounter: boolean;
@@ -8,18 +7,26 @@ type setQuantityProps = {
   handleQtyDecrease: () => void;
 };
 
-function SetQuantity({quantity, cardCounter, handleQtyIncrease, handleQtyDecrease}: setQuantityProps) {
-    
+function SetQuantity({
+  quantity,
+  cardCounter,
+  handleQtyIncrease,
+  handleQtyDecrease,
+}: setQuantityProps) {
   return (
     <div className="flex gap-8 items-center">
       {cardCounter ? null : <div className="font-semibold">Quantity</div>}
       <div className="flex md:flex-row flex-col gap-4 items-center lg:text-[22px] text-sm">
-        <Button variant={"outline"} disabled={quantity <= 1}>
+        <Button
+          variant={"outline"}
+          disabled={quantity <= 1}
+          onClick={handleQtyDecrease}
+        >
           {" "}
           -{" "}
         </Button>
-    <div>{quantity}</div>
-        <Button variant={"outline"}  onClick={handleQtyIncrease}>
+        <div>{quantity}</div>
+        <Button variant={"outline"} onClick={handleQtyIncrease}>
           {" "}
           +{" "}
         </Button>
@@ -28,4 +35,4 @@ function SetQuantity({quantity, cardCounter, handleQtyIncrease, handleQtyDecreas
   );
 }
 
-export default SetQuantity
+export default SetQuantity;

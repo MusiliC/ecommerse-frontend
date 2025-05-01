@@ -32,7 +32,7 @@ function Cart() {
         <div className="justify-self-end text-lg text-slate-800">Total</div>
       </div>
 
-      <div>
+      <div className="flex flex-col gap-3">
         {
           cart && cart.length > 0 && cart.map((item, i) => <ItemContent key={i} item = {item.item} itemQuantity = {item.quantity} />)
         }

@@ -2,7 +2,7 @@ import { cartItemType, ProductType } from "@/types";
 import { TrashIcon } from "lucide-react";
 import SetQuantity from "./SetQuantity";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { increaseCartQuantity } from "@/redux/actions/CartAction";
+import { decreaseQuantityAction, increaseCartQuantity, removeFromCartAction } from "@/redux/actions/CartAction";
 import { selectCartItems } from "@/redux/reducers/cartReducer";
 
 interface ItemContentProps {
@@ -23,6 +23,14 @@ function ItemContent({ item, itemQuantity }: ItemContentProps) {
     dispatch(increaseCartQuantity(productId));
   };
 
+    const handleQuantityDecrease = (productId: number) => {
+      dispatch(decreaseQuantityAction(productId));
+    };
+
+     const removeFromCart = (productId: number) => {
+       dispatch(removeFromCartAction(productId));
+     };
+
   return (
     <div className="grid md:grid-cols-5 grid-cols-4 md:text-base text-sm gap-4 items-center border-[1px] border-slate-200 rounded-md lg:px-4 p-2">
       <div className="md:col-span-2 justify-self-start flex flex-col gap-2">
@@ -41,7 +49,7 @@ function ItemContent({ item, itemQuantity }: ItemContentProps) {
 
         <div className="flex items-start gap-5 mt-3">
           <button
-            onClick={() => {}}
+            onClick={() => {removeFromCart(item.productId)}}
             className="flex items-center font-semibold space-x-2 px-4 py-1 text-xs border border-rose-600 text-rose-600 rounded-md hover:bg-red-50 transition-colors duration-300"
           >
             Remove <TrashIcon />{" "}
@@ -56,7 +64,7 @@ function ItemContent({ item, itemQuantity }: ItemContentProps) {
           handleQtyIncrease={() => {
             handleQuantityIncrease(item.productId);
           }}
-          handleQtyDecrease={() => {}}
+          handleQtyDecrease={() => {handleQuantityDecrease(item.productId)}}
         />
       </div>
 

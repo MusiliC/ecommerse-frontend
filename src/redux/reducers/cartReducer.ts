@@ -4,9 +4,8 @@ import { RootState } from "../store";
 
 const cartItemsString = localStorage.getItem("cartItems");
 const cartItems: cartItemType[] = cartItemsString
-  ? JSON.parse(cartItemsString).map(
-      (item: ProductType) =>
-        "item" in item ? item : { item: item, quantity: item.quantity || 1 } 
+  ? JSON.parse(cartItemsString).map((item: ProductType) =>
+      "item" in item ? item : { item: item, quantity: item.quantity || 1 }
     )
   : [];
 const initialState: cartState = {
@@ -91,10 +90,32 @@ export const cartSlice = createSlice({
         state.totalItems = calculateTotalItems(state.cart);
       }
     },
+    decreaseQuantity: (state, action: PayloadAction<number>) => {
+      const productId = action.payload;
+      const cartItem = state.cart.find(
+        (cartItem) => cartItem.item.productId === productId
+      );
+
+      if (cartItem) {
+        cartItem.quantity -= 1;
+        saveCartToStorage(state.cart);
+        state.totalPrice = calculateTotalPrice(state.cart);
+        state.totalItems = calculateTotalItems(state.cart);
+      }
+    },
+    removeFromCart: (state, action: PayloadAction<number>) => {
+      const productId = action.payload;
+      state.cart = state.cart.filter(
+        (cartItem) => cartItem.item.productId !== productId
+      );
+      saveCartToStorage(state.cart);
+      state.totalPrice = calculateTotalPrice(state.cart);
+      state.totalItems = calculateTotalItems(state.cart);
+    },
   },
 });
 
-export const { addToCart, increaseQuantity } = cartSlice.actions;
+export const { addToCart, increaseQuantity, removeFromCart, decreaseQuantity } = cartSlice.actions;
 
 export const selectCartItems = (state: RootState): cartItemType[] =>
   state.cart.cart;
