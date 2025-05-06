@@ -12,7 +12,7 @@ export const accountLoginAction = createAsyncThunk(
          
       localStorage.setItem("auth", JSON.stringify(response?.data?.data));
 
-      toast.success("Login increased");
+      toast.success("Login success");
       return {
         user: response?.data?.data,
         success: true,
@@ -25,3 +25,27 @@ export const accountLoginAction = createAsyncThunk(
     }
   }
 );
+
+export const accountSignUpAction = createAsyncThunk(
+  "auth/signupUser",
+  async (data: LoginFormData, thunkAPI) => {
+    try {
+      const response = await api.post("/auth/signup", data);
+
+      toast.success("Register Success");
+      return {
+        user: response?.data?.data,
+        success: true,
+      };
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);
+
+
+
+

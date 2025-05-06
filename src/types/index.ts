@@ -66,7 +66,7 @@ export type AuthState = {
   address: null;
   isLoading: boolean;
   error: null;
-  success: false;
+  success: boolean;
 };
 
 

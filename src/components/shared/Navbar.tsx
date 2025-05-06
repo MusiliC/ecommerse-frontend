@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import Badge, { BadgeProps } from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -7,9 +8,20 @@ import IconButton from "@mui/material/IconButton";
 import { navLinks } from "../utils";
 import useResponsive from "../hooks/useResponsive";
 import { ShoppingCart } from "lucide-react";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { selectTotalCartItems } from "@/redux/reducers/cartReducer";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { logout } from "@/redux/reducers/AuthReducer";
+import toast from "react-hot-toast";
 
 const StyledBadge = styled(Badge)<BadgeProps>(() => ({
   "& .MuiBadge-badge": {
@@ -23,8 +35,17 @@ const StyledBadge = styled(Badge)<BadgeProps>(() => ({
 const PublicHeader = () => {
   const { smaller, larger } = useResponsive();
 
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate();
+
   const totalItems = useAppSelector(selectTotalCartItems);
-  const user = useAppSelector(state => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user);
+
+  const handleLogOut = () => {
+        dispatch(logout());
+        toast.success("Logged out successfully");
+        navigate("/login"); 
+  }
 
   return (
     <header className="flex items-center px-4 h-16 bg-gray-600">
@@ -50,7 +71,25 @@ const PublicHeader = () => {
               ))}
             <li className="text-sm uppercase tracking-wider text-white">
               {user ? (
-                <Link to="user">{user.username}</Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="text-sm uppercase tracking-wider text-white">
+                    {user.username}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link to="/profile"></Link> Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/orders"></Link> Order
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem className="px-3" onClick={handleLogOut}>
+                      <Button>Logout</Button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Link to="login">Login</Link>
               )}
