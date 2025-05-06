@@ -60,3 +60,23 @@ export type PaginationType = {
   totalPages?: number;
   lastPage?: boolean;
 };
+
+export type AuthState = {
+  user: User | null;
+  address: null;
+  isLoading: boolean;
+  error: null;
+  success: false;
+};
+
+
+export type User = {
+  id: number,
+  jwtToken: string,
+  username: string,
+  roles: string[]
+}
+
+export type IPayloadResult = {
+  payload: { [key: string]: any };
+};

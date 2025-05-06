@@ -1,6 +1,7 @@
-export const handleApiError = (error: any) => {
+export const handleApiError = (error: any) => { 
+  
   if (typeof error === "string") return error;
-  if (error?.response?.data?.message) return error.response.data.message;
+  if (error?.response?.data?.data) return error.response.data.data;
   if (error?.message) return error.message;
   return "An unexpected error occurred.";
 };

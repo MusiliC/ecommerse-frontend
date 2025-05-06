@@ -29,5 +29,4 @@ export const navLinks = [
   { to: "/products", label: "Products", translation: "nav.login" },
   { to: "/about", label: "About", translation: "nav.about" },
   { to: "/contact", label: "Contact", translation: "nav.contact" },
-  { to: "/register", label: "Register", translation: "nav.register" },
 ];

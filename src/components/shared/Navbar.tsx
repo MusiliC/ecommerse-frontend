@@ -1,9 +1,7 @@
-
 import { Link } from "react-router-dom";
 import Badge, { BadgeProps } from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-
 
 // import MobileNav from "./MobileNav";
 import { navLinks } from "../utils";
@@ -19,15 +17,14 @@ const StyledBadge = styled(Badge)<BadgeProps>(() => ({
     top: 8,
     border: `2px solid `,
     padding: "0 4px",
-    
   },
 }));
 
 const PublicHeader = () => {
-
   const { smaller, larger } = useResponsive();
 
-    const totalItems = useAppSelector(selectTotalCartItems);
+  const totalItems = useAppSelector(selectTotalCartItems);
+  const user = useAppSelector(state => state.auth.user);
 
   return (
     <header className="flex items-center px-4 h-16 bg-gray-600">
@@ -51,6 +48,13 @@ const PublicHeader = () => {
                   </Link>
                 </li>
               ))}
+            <li className="text-sm uppercase tracking-wider text-white">
+              {user ? (
+                <Link to="user">{user.username}</Link>
+              ) : (
+                <Link to="login">Login</Link>
+              )}
+            </li>
             <li>
               <Link to="cart">
                 <IconButton aria-label="cart">
