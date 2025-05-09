@@ -1,6 +1,9 @@
+import { AddressType } from "./AddressSchema";
+
 export type StateType = {
   products: ProductType[] | null;
   categories: CategoryType[] | null;
+  address: AddressType[] | null;
   pagination: PaginationType;
   isLoading: boolean;
   error: string | null;

@@ -8,9 +8,9 @@ export const accountLoginAction = createAsyncThunk(
   "auth/authenticateUser",
   async (data: LoginFormData, thunkAPI) => {
     try {
-      const response = await api.post("/auth/signin", data);
-         
-      localStorage.setItem("auth", JSON.stringify(response?.data?.data));
+      const response = await api.post("/auth/login", data);
+
+      localStorage.setItem("auth", JSON.stringify(response?.data));
 
       toast.success("Login success");
       return {

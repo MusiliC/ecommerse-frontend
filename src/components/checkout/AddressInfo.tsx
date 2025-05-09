@@ -1,8 +1,14 @@
 import { Skeleton } from "@mui/material";
+import AddressInfoModal from "../address/AddressInfoModal";
+import { useEffect } from "react";
 
 function AddressInfo() {
   const noAddressExist = true;
   const isLoading = false;
+
+  useEffect(() => {
+
+  },[])
 
   return (
     <div className="pt-4">
@@ -11,6 +17,9 @@ function AddressInfo() {
           <h1 className="text-slate-800 text-center font-bold text-2xl">
             Please add your address to complete purchase
           </h1>
+          <div className="my-5">
+            <AddressInfoModal />
+          </div>
         </div>
       ) : (
         <div className="relative p-6 rounded-lg max-w-md mx-auto">

@@ -8,6 +8,7 @@ import { RootState } from "../store";
 const initialState: StateType = {
   products: null,
   categories: null,
+  address: null,
   pagination: {},
   isLoading: false,
   error: null,
