@@ -1,6 +1,9 @@
 import { StateType } from "@/types";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createAddressAction } from "../actions/AddressAction";
+import {
+  createAddressAction,
+  getAddressAction,
+} from "../actions/AddressAction";
 import { RootState } from "../store";
 
 const initialState: StateType = {
@@ -41,7 +44,10 @@ export const addressSlice = createSlice({
     builder
       .addCase(createAddressAction.pending, handlePending)
       .addCase(createAddressAction.fulfilled, handleFulfilled)
-      .addCase(createAddressAction.rejected, handleRejected);
+      .addCase(createAddressAction.rejected, handleRejected)
+      .addCase(getAddressAction.pending, handlePending)
+      .addCase(getAddressAction.fulfilled, handleFulfilled)
+      .addCase(getAddressAction.rejected, handleRejected);
   },
 });
 

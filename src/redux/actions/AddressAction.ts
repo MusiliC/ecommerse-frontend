@@ -22,21 +22,19 @@ export const createAddressAction = createAsyncThunk(
 );
 
 
-// export const getProductsAction = createAsyncThunk(
-//   "address/getAddress",
-//   async (_, thunkAPI) => {
-//     try {
+export const getAddressAction = createAsyncThunk(
+  "address/getAddress",
+  async (_, thunkAPI) => {
+    try {
 
-//       const { data } = await api.get("/addresses", {
-//         params: paramsObject,
-//       });
-//       return data.data;
-//     } catch (error: unknown) {
-//       localStorage.clear();
-//       console.log(error);
-//       const parsedError = handleApiError(error);
+      const { data } = await api.get("/addresses");
+      return data.data;
+    } catch (error: unknown) {
+      localStorage.clear();
+      console.log(error);
+      const parsedError = handleApiError(error);
 
-//       return thunkAPI.rejectWithValue(parsedError);
-//     }
-//   }
-// );
+      return thunkAPI.rejectWithValue(parsedError);
+    }
+  }
+);

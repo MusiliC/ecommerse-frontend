@@ -1,11 +1,19 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddressInfo from "./AddressInfo";
+import { useAppDispatch } from "@/redux/hooks";
+import { getAddressAction } from "@/redux/actions/AddressAction";
 
 function Checkout() {
   const [activeStep] = useState(0);
 
+  const dispatch = useAppDispatch();
+
   const steps = ["Address", "Payment Method", "Order Summary", "Payment"];
+
+  useEffect(() => {
+    dispatch(getAddressAction())
+  },[dispatch])
 
   return (
     <div className="py-14 min-h-[calc(100vh-100px)] px-4">
