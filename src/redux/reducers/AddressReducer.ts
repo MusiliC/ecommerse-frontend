@@ -3,6 +3,7 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   createAddressAction,
   getAddressAction,
+  updateAddressAction,
 } from "../actions/AddressAction";
 import { RootState } from "../store";
 
@@ -10,6 +11,7 @@ const initialState: StateType = {
   products: null,
   categories: null,
   address: null,
+  selectedCheckoutAddress: null,
   pagination: {},
   isLoading: false,
   error: null,
@@ -39,7 +41,11 @@ const handleRejected = (state: StateType, action: any) => {
 export const addressSlice = createSlice({
   name: "address",
   initialState,
-  reducers: {},
+  reducers: {
+    addSelectedAddress: (state, action) => {
+      state.selectedCheckoutAddress = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createAddressAction.pending, handlePending)
@@ -47,7 +53,10 @@ export const addressSlice = createSlice({
       .addCase(createAddressAction.rejected, handleRejected)
       .addCase(getAddressAction.pending, handlePending)
       .addCase(getAddressAction.fulfilled, handleFulfilled)
-      .addCase(getAddressAction.rejected, handleRejected);
+      .addCase(getAddressAction.rejected, handleRejected)
+      .addCase(updateAddressAction.pending, handlePending)
+      .addCase(updateAddressAction.fulfilled, handleFulfilled)
+      .addCase(updateAddressAction.rejected, handleRejected);
   },
 });
 
@@ -60,3 +69,5 @@ export const selectAddress = createSelector(
   [selectedAddress],
   (address) => address.address
 );
+
+export const { addSelectedAddress } = addressSlice.actions;

@@ -1,23 +1,21 @@
 import { Skeleton } from "@mui/material";
 import AddressInfoModal from "../address/AddressInfoModal";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import AddressList from "./AddressList";
 import { AddressType } from "@/types/AddressSchema";
 
 function AddressInfo() {
 
-  const { address, isLoading } = useAppSelector((state) => state.address);
+  const { address, isLoading, selectedCheckoutAddress } = useAppSelector(
+    (state) => state.address
+  );
   
   const [selectedAddress, setSelectedAddress] = useState<AddressType | undefined>();
    const [isOpen, setIsOpen] = useState(false);
 
-  const noAddressExist = !address || address.length === 0;
- 
+  const noAddressExist = !address || address.length === 0; 
 
-  useEffect(() => {
-
-  },[])
 
   return (
     <div className="pt-4">
@@ -27,7 +25,11 @@ function AddressInfo() {
             Please add your address to complete purchase
           </h1>
           <div className="my-5">
-            <AddressInfoModal setIsOpen={setIsOpen} isOpen={isOpen} />
+            <AddressInfoModal
+              setIsOpen={setIsOpen}
+              isOpen={isOpen}
+              selectedCheckoutAddress={selectedCheckoutAddress}
+            />
           </div>
         </div>
       ) : (
@@ -48,8 +50,11 @@ function AddressInfo() {
               />
               {address.length > 0 && (
                 <div className="flex items-center justify-center">
-
-                  <AddressInfoModal setIsOpen={setIsOpen} isOpen={isOpen} />
+                  <AddressInfoModal
+                    setIsOpen={setIsOpen}
+                    isOpen={isOpen}
+                    selectedCheckoutAddress={selectedCheckoutAddress}
+                  />
                 </div>
               )}
             </div>

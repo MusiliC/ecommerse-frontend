@@ -1,3 +1,5 @@
+import { selectUserCheckoutAddress } from "@/redux/actions/AddressAction";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { AddressType } from "@/types/AddressSchema";
 import {
   Building,
@@ -19,15 +21,18 @@ function AddressList({
   setSelectedAddress,
   setIsOpen,
 }: addressListProps) {
-  const selectedAddress: AddressType = address[0];
+  const dispatch = useAppDispatch();
+  const selectedAddress = useAppSelector(
+    (state) => state.address.selectedCheckoutAddress
+  );
 
   const handleAddressSelection = (item: AddressType) => {
-    setSelectedAddress(item);
+    dispatch(selectUserCheckoutAddress(item));
   };
 
   const handleEdit = (item: AddressType) => {
     setSelectedAddress(item);
-    setIsOpen(true)
+    setIsOpen(true);
   };
 
   const handleDelete = (item: AddressType) => {
