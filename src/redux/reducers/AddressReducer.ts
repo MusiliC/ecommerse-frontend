@@ -17,14 +17,14 @@ const initialState: StateType = {
 };
 
 const handlePending = (state: StateType) => {
-  state.products = null;
+  state.address = null;
   state.isLoading = true;
   state.success = false;
   state.error = null;
 };
 
 const handleFulfilled = (state: StateType, action: PayloadAction<any>) => {
-  state.products = action.payload;
+  state.address = action.payload;
   state.isLoading = false;
   state.success = action.payload.success;
   state.error = null;

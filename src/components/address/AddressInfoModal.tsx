@@ -16,11 +16,15 @@ import AddressAddForm from "./AddressAddForm";
 import { addressSchema, AddressType } from "@/types/AddressSchema";
 import { useAppDispatch } from "@/redux/hooks";
 import { createAddressAction } from "@/redux/actions/AddressAction";
-import { useState } from "react";
 
-function AddressInfoModal() {
+
+type modalProps = {
+  setIsOpen: (val: boolean) => void;
+  isOpen: boolean
+};
+
+function AddressInfoModal({ setIsOpen, isOpen }: modalProps) {
   const dispatch = useAppDispatch();
-    const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<AddressType>({
     resolver: zodResolver(addressSchema),
@@ -33,14 +37,14 @@ function AddressInfoModal() {
   });
 
   const onSubmit = async (data: AddressType) => {
-      await dispatch(createAddressAction(data));
-      setIsOpen(false);
+    await dispatch(createAddressAction(data));
+    setIsOpen(false);
   };
 
   return (
     <section>
       <div>
-        <AlertDialog open = {isOpen} onOpenChange={setIsOpen}>
+        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <AlertDialogTrigger asChild>
             <Button>Add Address</Button>
           </AlertDialogTrigger>

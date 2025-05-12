@@ -1,10 +1,19 @@
 import { Skeleton } from "@mui/material";
 import AddressInfoModal from "../address/AddressInfoModal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import AddressList from "./AddressList";
+import { AddressType } from "@/types/AddressSchema";
 
 function AddressInfo() {
-  const noAddressExist = true;
-  const isLoading = false;
+
+  const { address, isLoading } = useAppSelector((state) => state.address);
+  
+  const [selectedAddress, setSelectedAddress] = useState<AddressType | undefined>();
+   const [isOpen, setIsOpen] = useState(false);
+
+  const noAddressExist = !address || address.length === 0;
+ 
 
   useEffect(() => {
 
@@ -18,7 +27,7 @@ function AddressInfo() {
             Please add your address to complete purchase
           </h1>
           <div className="my-5">
-            <AddressInfoModal />
+            <AddressInfoModal setIsOpen={setIsOpen} isOpen={isOpen} />
           </div>
         </div>
       ) : (
@@ -32,7 +41,17 @@ function AddressInfo() {
             </div>
           ) : (
             <div className="space-y-4 pt-6">
-              <p>Address List here...</p>
+              <AddressList
+                address={address}
+                setSelectedAddress={setSelectedAddress}
+                setIsOpen={setIsOpen}
+              />
+              {address.length > 0 && (
+                <div className="flex items-center justify-center">
+
+                  <AddressInfoModal setIsOpen={setIsOpen} isOpen={isOpen} />
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -28,7 +28,7 @@ export const getAddressAction = createAsyncThunk(
     try {
 
       const { data } = await api.get("/addresses");
-      return data.data;
+      return data?.data?.content;
     } catch (error: unknown) {
       localStorage.clear();
       console.log(error);
