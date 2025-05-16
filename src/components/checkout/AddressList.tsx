@@ -1,4 +1,7 @@
-import { selectUserCheckoutAddress } from "@/redux/actions/AddressAction";
+import {
+  deleteAddressAction,
+  selectUserCheckoutAddress,
+} from "@/redux/actions/AddressAction";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { AddressType } from "@/types/AddressSchema";
 import {
@@ -9,6 +12,7 @@ import {
   TowerControl,
   Trash,
 } from "lucide-react";
+import ConfirmPopup from "../shared/ConfirmPopup";
 
 type addressListProps = {
   address: AddressType[];
@@ -36,7 +40,7 @@ function AddressList({
   };
 
   const handleDelete = (item: AddressType) => {
-    setSelectedAddress(item);
+    dispatch(deleteAddressAction(item));
   };
 
   return (
@@ -79,9 +83,15 @@ function AddressList({
               />
             </div>
             <div>
-              <Trash
-                className="text-red-700"
-                onClick={() => handleDelete(item)}
+              <ConfirmPopup
+                onConfirm={() => handleDelete(item)}
+                title={"Delete Address"}
+                description={"Confirm Delete Address?"}
+                triggerButton={
+                  <div className="flex items-center justify-start w-full gap-2">
+                    <Trash className="text-red-700" />
+                  </div>
+                }
               />
             </div>
           </div>

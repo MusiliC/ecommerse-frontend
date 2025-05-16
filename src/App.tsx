@@ -17,8 +17,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+
+
+        <Route path="/" element={<PrivateRoute />}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Route>
 
         <Route path="/" element={<PrivateRoute publicPage />}>
           <Route path="/login" element={<Login />} />

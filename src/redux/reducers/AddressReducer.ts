@@ -2,6 +2,7 @@ import { StateType } from "@/types";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   createAddressAction,
+  deleteAddressAction,
   getAddressAction,
   updateAddressAction,
 } from "../actions/AddressAction";
@@ -45,6 +46,9 @@ export const addressSlice = createSlice({
     addSelectedAddress: (state, action) => {
       state.selectedCheckoutAddress = action.payload;
     },
+    clearCheckoutAddress: (state) => {
+      state.selectedCheckoutAddress = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -56,7 +60,10 @@ export const addressSlice = createSlice({
       .addCase(getAddressAction.rejected, handleRejected)
       .addCase(updateAddressAction.pending, handlePending)
       .addCase(updateAddressAction.fulfilled, handleFulfilled)
-      .addCase(updateAddressAction.rejected, handleRejected);
+      .addCase(updateAddressAction.rejected, handleRejected)
+      .addCase(deleteAddressAction.pending, handlePending)
+      .addCase(deleteAddressAction.fulfilled, handleFulfilled)
+      .addCase(deleteAddressAction.rejected, handleRejected);
   },
 });
 

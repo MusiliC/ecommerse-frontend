@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { accountLoginAction } from "@/redux/actions/AuthAction";
 import { IPayloadResult } from "@/types";
+import { useEffect } from "react";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -26,6 +27,7 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+   const user = useAppSelector((state) => state.auth.user);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -42,6 +44,13 @@ export default function Login() {
       navigate("/");
     }
   };
+
+
+  useEffect(() => {
+    if ( user) {
+      navigate("/"); 
+    }
+  }, [ user, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

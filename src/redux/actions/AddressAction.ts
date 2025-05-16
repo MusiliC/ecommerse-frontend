@@ -56,6 +56,23 @@ export const updateAddressAction = createAsyncThunk(
   }
 );
 
+export const deleteAddressAction = createAsyncThunk(
+  "address/delete",
+  async (data: AddressType, thunkAPI) => {
+    try {
+      const response = await api.delete(`/addresses/${data.addressId}`);
+
+      toast.success("Address Deleted");
+      return response?.data?.data;
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);
+
 export const selectUserCheckoutAddress = (
   data: AddressType
 ): ThunkAction<void, RootState, unknown, Action<string>> => {
