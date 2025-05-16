@@ -4,6 +4,7 @@ import  productSlice  from "./productReducer";
 import  categorySlice from "./categoryReducer";
 import  cartSlice  from "./cartReducer";
 import addressSlice from './AddressReducer';
+import  paymentMethodSlice  from './paymentMethodReducer';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   categories: categorySlice,
   cart: cartSlice,
   auth: authSlice,
-  address: addressSlice
+  address: addressSlice,
+  paymentMethod: paymentMethodSlice
 
 });
 

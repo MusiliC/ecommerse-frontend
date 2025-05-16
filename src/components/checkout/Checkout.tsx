@@ -4,6 +4,7 @@ import AddressInfo from "./AddressInfo";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getAddressAction } from "@/redux/actions/AddressAction";
 import { Button } from "../ui/button";
+import PaymentMethod from "./PaymentMethod";
 
 function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
@@ -40,6 +41,7 @@ function Checkout() {
       </Stepper>
 
       <div className="mt-5 ">{activeStep === 0 && <AddressInfo />}</div>
+      <div className="mt-5 ">{activeStep === 1 && <PaymentMethod />}</div>
 
       <div
         className="flex justify-between items-center px-4 fixed z-50 h-24 bottom-0  left-0 w-full py-4 border-slate-200"
