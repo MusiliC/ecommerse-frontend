@@ -1,8 +1,16 @@
 import { cartItemType, ProductType } from "@/types";
 import { AppThunk } from "../store";
 import { selectProductById } from "../reducers/productReducer";
-import { addToCart, decreaseQuantity, increaseQuantity, removeFromCart } from "../reducers/cartReducer";
+import {
+  addToCart,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from "../reducers/cartReducer";
 import toast from "react-hot-toast";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import api from "@/api/api";
+import { handleApiError } from "@/components/utils/utils";
 
 export const addToCartAction = (
   data: ProductType,
@@ -30,8 +38,7 @@ export const addToCartAction = (
 };
 
 export const increaseCartQuantity = (productId: number): AppThunk<boolean> => {
-  return (dispatch, getState) => {      
-    
+  return (dispatch, getState) => {
     const getProduct = selectProductById(getState(), productId);
     const cart = getState().cart.cart; // Assuming cartReducer is mounted under 'cart'
     const cartItem = cart.find(
@@ -64,9 +71,9 @@ export const increaseCartQuantity = (productId: number): AppThunk<boolean> => {
   };
 };
 
-
-
-export const decreaseQuantityAction = (productId: number): AppThunk<boolean> => {
+export const decreaseQuantityAction = (
+  productId: number
+): AppThunk<boolean> => {
   return (dispatch, getState) => {
     const getProduct = selectProductById(getState(), productId);
     const cart = getState().cart.cart; // Assuming cartReducer is mounted under 'cart'
@@ -86,7 +93,7 @@ export const decreaseQuantityAction = (productId: number): AppThunk<boolean> => 
       return isQuantityValid;
     }
 
-    isQuantityValid = cartItem.quantity > 1
+    isQuantityValid = cartItem.quantity > 1;
 
     if (isQuantityValid) {
       dispatch(decreaseQuantity(productId));
@@ -105,3 +112,38 @@ export const removeFromCartAction = (productId: number): AppThunk<void> => {
     toast.success("Item removed from cart");
   };
 };
+
+export const createUserCart = createAsyncThunk(
+  "cart/createUserCart",
+  async (data, thunkAPI) => {
+    try {
+      const response = await api.post("/carts/create", data);
+
+      await thunkAPI.dispatch(fetchUserCart()).unwrap();
+      toast.success("Cart created/updated successfully");
+      return response?.data;
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);
+
+export const fetchUserCart = createAsyncThunk(
+  "cart/fetchUserCart",
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get("/carts/users/cart");
+      if (!response?.data?.data) {
+        throw new Error("No cart data found in response");
+      }
+      return response?.data?.data;
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);

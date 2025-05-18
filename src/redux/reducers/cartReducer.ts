@@ -1,6 +1,7 @@
 import { cartItemType, cartState, ProductType } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { createUserCart, fetchUserCart } from "../actions/CartAction";
 
 const cartItemsString = localStorage.getItem("cartItems");
 const cartItems: cartItemType[] = cartItemsString
@@ -13,6 +14,9 @@ const initialState: cartState = {
   totalPrice: calculateTotalPrice(cartItems),
   totalItems: calculateTotalItems(cartItems), // Initialize totalItems
   cartId: null,
+  isLoading: false,
+  error: null,
+  success: false,
 };
 
 interface AddToCartPayload {
@@ -113,9 +117,61 @@ export const cartSlice = createSlice({
       state.totalItems = calculateTotalItems(state.cart);
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createUserCart.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(createUserCart.fulfilled, (state) => {
+        state.isLoading = false;
+        state.success = true;
+     
+      })
+      .addCase(createUserCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = (action.payload as string) || "Unknown error occurred";
+      });
+      builder
+        .addCase(fetchUserCart.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(fetchUserCart.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.success = true;
+          // Transform the API response to match cartItemType
+          const { products, cartId, totalPrice } = action.payload;
+          console.log(action.payload);
+
+          state.cart = products.map((product: ProductType) => ({
+            item: {
+              productId: product.productId,
+              productName: product.productName,
+              description: product.description,
+              image: product.image,
+              price: product.price, // Adjust based on your ProductType
+              specialPrice: product.specialPrice, // If applicable
+              // Add other fields as needed
+            },
+            quantity: product.quantity,
+          }));
+          state.cartId = cartId;
+          state.totalPrice = totalPrice;
+          state.totalItems = calculateTotalItems(state.cart);
+          console.log(state.cart);
+
+          saveCartToStorage(state.cart);
+        })
+        .addCase(fetchUserCart.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = (action.payload as string) || "Unknown error occurred";
+        });
+  },
 });
 
-export const { addToCart, increaseQuantity, removeFromCart, decreaseQuantity } = cartSlice.actions;
+export const { addToCart, increaseQuantity, removeFromCart, decreaseQuantity } =
+  cartSlice.actions;
 
 export const selectCartItems = (state: RootState): cartItemType[] =>
   state.cart.cart;

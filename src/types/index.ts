@@ -16,6 +16,9 @@ export type cartState = {
   totalPrice: number;
   totalItems: number;
   cartId: number | null;
+  isLoading: boolean | null;
+  error: string | null;
+  success: boolean;
 };
 
 export type cartItemType = {
