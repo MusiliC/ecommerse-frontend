@@ -142,7 +142,7 @@ export const cartSlice = createSlice({
           state.success = true;
           // Transform the API response to match cartItemType
           const { products, cartId, totalPrice } = action.payload;
-          console.log(action.payload);
+
 
           state.cart = products.map((product: ProductType) => ({
             item: {
@@ -159,8 +159,6 @@ export const cartSlice = createSlice({
           state.cartId = cartId;
           state.totalPrice = totalPrice;
           state.totalItems = calculateTotalItems(state.cart);
-          console.log(state.cart);
-
           saveCartToStorage(state.cart);
         })
         .addCase(fetchUserCart.rejected, (state, action) => {

@@ -1,14 +1,12 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { createUserCart } from "@/redux/actions/CartAction";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { addPaymentMethod } from "@/redux/reducers/paymentMethodReducer";
 import { useEffect } from "react";
 
 
-function PaymentMethod() {
-  const { paymentMethod } = useAppSelector((state) => state.paymentMethod);
-  const {cart, cartId} = useAppSelector((state) => state.cart);
+function PaymentMethod({ cart, cartId, paymentMethod }) {
   const dispatch = useAppDispatch();
 
   const handlePaymentMethod = (value: string) => {
@@ -16,17 +14,17 @@ function PaymentMethod() {
   };
 
   useEffect(() => {
-    if(cart.length >  0 && !cartId){
+    if (cart.length > 0 && !cartId) {
       const sendCartItems = cart.map((item) => {
-        return{
+        return {
           productId: item.item.productId,
           quantity: item.quantity,
-        }
-      })
+        };
+      });
 
-      dispatch(createUserCart(sendCartItems))
+      dispatch(createUserCart(sendCartItems));
     }
-  }, [cart, cartId, dispatch])
+  }, [cart, cartId, dispatch]);
 
   return (
     <div className="max-w-md mx-auto p-5 bg-white shadow-md rounded-lg mt-16 border">

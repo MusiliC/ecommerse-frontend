@@ -5,16 +5,18 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getAddressAction } from "@/redux/actions/AddressAction";
 import { Button } from "../ui/button";
 import PaymentMethod from "./PaymentMethod";
+import OrderSummary from "./OrderSummary";
+import StripePayment from "./StripePayment";
+import Mpesa from "./Mpesa";
 
 function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
 
   const dispatch = useAppDispatch();
   const { selectedCheckoutAddress } = useAppSelector((state) => state.address);
+  const { cart, cartId, totalPrice } = useAppSelector((state) => state.cart);
 
-  const paymentMethod = {
-    home: "K",
-  };
+  const { paymentMethod } = useAppSelector((state) => state.paymentMethod);
 
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
@@ -41,7 +43,31 @@ function Checkout() {
       </Stepper>
 
       <div className="mt-5 ">{activeStep === 0 && <AddressInfo />}</div>
-      <div className="mt-5 ">{activeStep === 1 && <PaymentMethod />}</div>
+      <div className="mt-5 ">
+        {activeStep === 1 && (
+          <PaymentMethod
+            cart={cart}
+            cartId={cartId}
+            paymentMethod={paymentMethod}
+          />
+        )}
+      </div>
+      <div className="mt-5 ">
+        {activeStep === 2 && (
+          <OrderSummary
+            address={selectedCheckoutAddress}
+            cart={cart}
+            paymentMethod={paymentMethod}
+            totalPrice={totalPrice}
+          />
+        )}
+      </div>
+
+      <div className="mt-5 ">
+        {activeStep === 3 && (
+          <>{paymentMethod === "stripe" ? <StripePayment /> : <Mpesa />}</>
+        )}
+      </div>
 
       <div
         className="flex justify-between items-center px-4 fixed z-50 h-24 bottom-0  left-0 w-full py-4 border-slate-200"

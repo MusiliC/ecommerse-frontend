@@ -8,7 +8,6 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (response) => {
-    console.log("Response cookies:", document.cookie);
     return response;
   },
   (error) => {
