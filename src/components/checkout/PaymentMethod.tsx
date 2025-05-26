@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { createUserCart } from "@/redux/actions/CartAction";
@@ -6,7 +7,13 @@ import { addPaymentMethod } from "@/redux/reducers/paymentMethodReducer";
 import { useEffect } from "react";
 
 
-function PaymentMethod({ cart, cartId, paymentMethod }) {
+interface PaymentMethodProps {
+  cart: Array<any>;
+  cartId?: string;
+  paymentMethod: string;
+}
+
+function PaymentMethod({ cart, cartId, paymentMethod }: PaymentMethodProps) {
   const dispatch = useAppDispatch();
 
   const handlePaymentMethod = (value: string) => {

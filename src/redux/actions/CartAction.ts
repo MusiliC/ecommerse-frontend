@@ -147,3 +147,25 @@ export const fetchUserCart = createAsyncThunk(
     }
   }
 );
+
+
+export const createStripePaymentSecret = createAsyncThunk(
+  "cart/createStripePaymentSecret",
+  async (totalPrice : number, thunkAPI) => {
+    try {
+      const response = await api.post("/orders/stripe-client-secret", {
+        amount: totalPrice,
+        currency: "usd",
+      });
+
+      await thunkAPI.dispatch(fetchUserCart()).unwrap();
+      toast.success("Success");
+      return response?.data;
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);

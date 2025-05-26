@@ -25,6 +25,7 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   success: false,
+
 };
 
 const handlePending = (state: AuthState) => {

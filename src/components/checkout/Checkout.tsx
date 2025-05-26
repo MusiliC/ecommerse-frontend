@@ -6,8 +6,8 @@ import { getAddressAction } from "@/redux/actions/AddressAction";
 import { Button } from "../ui/button";
 import PaymentMethod from "./PaymentMethod";
 import OrderSummary from "./OrderSummary";
-import StripePayment from "./StripePayment";
-import Mpesa from "./Mpesa";
+import StripePayment from "../stripe/StripePayment";
+import MpesaPayment from "../mpesa/MpesaPayment";
 
 function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
@@ -65,7 +65,9 @@ function Checkout() {
 
       <div className="mt-5 ">
         {activeStep === 3 && (
-          <>{paymentMethod === "stripe" ? <StripePayment /> : <Mpesa />}</>
+          <>
+            {paymentMethod === "stripe" ? <StripePayment /> : <MpesaPayment />}
+          </>
         )}
       </div>
 

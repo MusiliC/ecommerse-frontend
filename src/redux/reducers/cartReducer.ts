@@ -1,7 +1,7 @@
 import { cartItemType, cartState, ProductType } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { createUserCart, fetchUserCart } from "../actions/CartAction";
+import { createStripePaymentSecret, createUserCart, fetchUserCart } from "../actions/CartAction";
 
 const cartItemsString = localStorage.getItem("cartItems");
 const cartItems: cartItemType[] = cartItemsString
@@ -17,6 +17,7 @@ const initialState: cartState = {
   isLoading: false,
   error: null,
   success: false,
+  clientSecret: "",
 };
 
 interface AddToCartPayload {
@@ -165,6 +166,22 @@ export const cartSlice = createSlice({
           state.isLoading = false;
           state.error = (action.payload as string) || "Unknown error occurred";
         });
+        builder
+          .addCase(createStripePaymentSecret.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+          })
+          .addCase(createStripePaymentSecret.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.success = true;
+            state.clientSecret = action.payload.data;
+            localStorage.setItem("clientSecret", JSON.stringify(action.payload.data));
+          })
+          .addCase(createStripePaymentSecret.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error =
+              (action.payload as string) || "Unknown error occurred";
+          });
   },
 });
 

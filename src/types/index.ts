@@ -19,6 +19,7 @@ export type cartState = {
   isLoading: boolean | null;
   error: string | null;
   success: boolean;
+  clientSecret?:string ;
 };
 
 export type cartItemType = {
@@ -74,6 +75,7 @@ export type AuthState = {
   isLoading: boolean;
   error: null;
   success: boolean;
+  clientSecret?: string;
 };
 
 
