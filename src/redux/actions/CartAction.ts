@@ -169,3 +169,32 @@ export const createStripePaymentSecret = createAsyncThunk(
     }
   }
 );
+
+interface PaymentConfirmData {
+  addressId: number;
+  pgName: string;
+  pgPaymentId: string;
+  pgStatus: string;
+  pgResponseMessage: string;
+}
+
+export const stripePaymentConfirm = createAsyncThunk(
+  "cart/stripePaymentConfirm",
+  async (data: PaymentConfirmData, thunkAPI) => {
+    try {
+      const response = await api.post("/orders/users/payments/online", data);
+
+      if (response.data) {
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("clientSecret");
+      }
+      toast.success("Success");
+      return response?.data;
+    } catch (error: unknown) {
+      const parsedError = handleApiError(error);
+
+      toast.error(parsedError);
+      return thunkAPI.rejectWithValue({ error: parsedError, success: false });
+    }
+  }
+);

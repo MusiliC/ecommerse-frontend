@@ -47,7 +47,7 @@ function Checkout() {
         {activeStep === 1 && (
           <PaymentMethod
             cart={cart}
-            cartId={cartId}
+            cartId={cartId !== null ? String(cartId) : undefined}
             paymentMethod={paymentMethod}
           />
         )}

@@ -19,11 +19,29 @@ const PaymentForm = ({ clientSecret, totalPrice }: PaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading] = useState(false);
-  const [errorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Your payment logic here
+    if(!stripe || !elements) {
+      return;
+    }
+    
+    const {errror: submitError } = await elements.submit();
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: `${import.meta.env.VITE_FRONTEND_URL}/order-confirm`,
+      },
+    });
+
+    if(error){
+        setErrorMessage(error.message ?? "")
+        return false;
+    }
+
   };
 
   const paymentElementOptions = {
